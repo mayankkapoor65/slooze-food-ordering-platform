@@ -5,8 +5,19 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client/core
 import { ApolloProvider } from "@apollo/client/react";
 import { setContext } from "@apollo/client/link/context";
 
+const getGraphqlUri = () => {
+  if (process.env.NEXT_PUBLIC_GRAPHQL_URI) {
+    return process.env.NEXT_PUBLIC_GRAPHQL_URI;
+  }
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+    // On Vercel cloud deployment, use same-origin relative /graphql endpoint
+    return "/graphql";
+  }
+  return "http://localhost:8000/graphql";
+};
+
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URI || "http://localhost:8000/graphql",
+  uri: getGraphqlUri(),
 });
 
 const authLink = setContext((_, { headers }) => {

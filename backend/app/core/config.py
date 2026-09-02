@@ -7,7 +7,10 @@ PROJECT_NAME = "Slooze Food Ordering System"
 API_PREFIX = "/graphql"
 
 # Database Configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./food_ordering.db")
+if os.getenv("VERCEL"):
+    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:////tmp/food_ordering.db")
+else:
+    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./food_ordering.db")
 
 # Roles & Access Scopes
 ROLE_ADMIN = "ADMIN"
